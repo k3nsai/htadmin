@@ -19,7 +19,7 @@ class htpasswd {
 	const HTMETA_NAME = ".htmeta";
 	function __construct($configpath, $use_metadata = false) {
 		$path = realpath ( $configpath );
-		$htpasswdfile = $path . "/" . self::HTPASSWD_NAME;
+		$htpasswdfile = $path . "/" . self::HTPASSWD_NAME; 
 		@$this->use_metadata = $use_metadata;
 
 		
@@ -107,8 +107,12 @@ class htpasswd {
 		if ($this->fp==null) {
 			return false;
 		}
+		$randomString = random_bytes(32);
+		$salt = base64_encode($randomString);
+		$hashed = crypt($password, '$6$'.$salt);
 		fseek ( $this->fp, 0, SEEK_END );
-		fwrite ( $this->fp, $username . ':' . self::htcrypt ( $password ) . "\n" );
+/**		fwrite ( $this->fp, $username . ':' . self::htcrypt ( $password ) . "\n" ); */
+		fwrite ( $this->fp, $username . ':' . $hashed ."\n" );
 		return true;
 	}
 	function meta_add(meta_model $meta_model) {
@@ -159,10 +163,15 @@ class htpasswd {
 		$usernames = explode ( ":", $line = rtrim ( fgets ( $this->fp ) ) );
 		trim ( $lusername = array_shift ( $usernames ) );
 			if ($lusername == $username) {
+                $randomString = random_bytes(32);
+                $salt = base64_encode($randomString);
+                $hashed = crypt($password, '$6$'.$salt);
                 fseek ( $this->fp, (- 1 - strlen($line)), SEEK_CUR );
                 self::delete($this->fp, $username, $this->filename, false);
                 file_put_contents ( $this->filename, 
-                    $username . ':' . self::htcrypt ( $password ) . "\n" ,
+/**                 $username . ':' . self::htcrypt ( $password ) . "\n" ,*/
+                    $username . ':' . $hashed . "\n" ,
+
                     FILE_APPEND | LOCK_EX);
 			}
 		}

@@ -9,13 +9,22 @@ interface i_password_hash_tool
 class md5_hash_tool implements i_password_hash_tool
 {
 
-	public function check_password_hash($password, $hash)
+/**	public function check_password_hash($password, $hash)
 	{
 		$passParts = explode('$', $hash);
 		$salt = $passParts[2];
 		$hashed = $this->crypt_apr_md5($password, $salt);
 		return $hashed == $hash;
-	}
+	}*/
+
+        public function check_password_hash($password, $hash)
+        {
+                $passParts = explode('$', $hash);
+                $salt = $passParts[2];
+                $hashed = crypt($password, '$6$'.$salt);
+                return $hashed == $hash;
+        }
+
 
 	public function crypt($password)
 	{
@@ -65,18 +74,34 @@ class crypt_hash_tool implements i_password_hash_tool
 {
 	public function check_password_hash($password, $hash)
 	{
-		$salt = substr($hash, 0, 2);
+/**		$salt = substr($hash, 0, 2);*/
+/**             $salt = substr($hash, 3, 16);
 		if (crypt($password, $salt) == $hash) {
 			return true;
 		} else {
 			return false;
-		}
+		}*/
+                $salt = substr($hash, 3, 16);
+                if (crypt($password, '$6$'.$salt) == $hash) {
+                        return true;
+                } else {
+                        return false;
+                }
+
+
 	}
 
 	public function crypt($password)
 	{
 		return crypt($password, substr(str_replace('+', '.', base64_encode(pack('N4', mt_rand(), mt_rand(), mt_rand(), mt_rand()))), 0, 22));
 	}
+
+/**     public function crypt($password)
+        {
+                return crypt($password, '$6$'.(base64_encode(random_bytes(32))));
+        }*/
+
+
 }
 
 
