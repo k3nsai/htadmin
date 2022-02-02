@@ -95,10 +95,7 @@ if (isset ( $_POST ['user'] )) {
 				<br /> <br />
 			<div class="col-xs-12 col-md-10 well">
 				<p>
-					Create new users for the htpasswd file here. A user can change
-					his/her password with this <a href="selfservice.php">self service
-						link.</a><br /> You can fill the username in the form if you add
-					the url parameter user=&lt;username&gt;
+					Create new users for the htpasswd file here.
 				</p>
 			</div>	
 			</div>

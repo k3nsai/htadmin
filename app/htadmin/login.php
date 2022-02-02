@@ -10,9 +10,8 @@ if (isset ( $_POST ['user'] ) && isset ( $_POST ['password'] )) {
 	
 	$hash_tool = new crypt_hash_tool();
 	
-
-
 	if ($username == $ini['admin_user'] && $hash_tool->check_password_hash($password,$ini['admin_pwd_hash'])) {
+/**        if ($username == $ini['admin_user'] && $hashed == $ini['admin_pwd_hash']) {*/
 		$_SESSION ['login'] = true;
 		header ( 'LOCATION:index.php' );
 		die ();
@@ -41,6 +40,8 @@ if (isset ( $error )) {
 	?>
 <div class="alert alert-danger">
 	<?php
+	echo "<p>" . $error . "</p>";
+        echo "<p>" . $ini['admin_pwd_hash'] . "</p>";
 	echo "<p>" . $error . "</p>";
 	?>
 		</div>
