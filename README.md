@@ -1,3 +1,7 @@
+Changes:
+- Changed the encryption method to SHA512 from the default crypt used by soster. 
+- Removed a couple of features like password management from the users side etc.
+
 HTAdmin
 =======
 
